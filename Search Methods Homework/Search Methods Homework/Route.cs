@@ -23,12 +23,13 @@ namespace Search_Methods_Homework
             }
             else
             {
-                Console.WriteLine("Route Found:");
+                Console.WriteLine("Route Found: length = " + Path.Count.ToString());
                 foreach (Location place in Path)
                 {
                     Console.Write(place.getName() + "->");
                 }
             }
         }
+
     }
 }

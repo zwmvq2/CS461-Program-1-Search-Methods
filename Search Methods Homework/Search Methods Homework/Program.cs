@@ -62,7 +62,7 @@ void PrintAdjacencies()
 
 void UserLoop()
 {
-    Console.WriteLine();
+    Console.WriteLine("**********************************************************************************");
     bool validStart = false;
   
     string input;
@@ -72,7 +72,13 @@ void UserLoop()
     {
         Console.WriteLine("Enter starting location ");
         input = Console.ReadLine();
-        if (myMap.ContainsKey(input))
+        if (input == "random")
+        {
+            Start = RandomLocation();
+            Console.WriteLine(Start.getName());
+            validStart = true;
+        }
+        else if (myMap.ContainsKey(input))
         {
             Start= myMap[input];
             validStart = true;
@@ -87,7 +93,13 @@ void UserLoop()
     {
         Console.WriteLine("Enter goal location ");
         input = Console.ReadLine();
-        if (myMap.ContainsKey(input))
+        if (input == "random")
+        {
+            Goal = RandomLocation();
+            Console.WriteLine(Goal.getName());
+            validGoal = true;
+        }
+        else if (myMap.ContainsKey(input))
         {
             Goal = myMap[input];
             validGoal = true;
@@ -105,8 +117,7 @@ void UserLoop()
     Console.WriteLine("3) Depth-First Search");
     Console.WriteLine("4) ID-DFS Search");
     Console.WriteLine("5) Best-first Search");
-    Console.WriteLine("6) A* Search");
-    Console.WriteLine("Enter anything aside from 1,2,3,4,5 or 6 to exit the program");
+    Console.WriteLine("Enter anything aside from 1,2,3,4,or 5 to exit the program");
     input = Console.ReadLine();
     switch(input)
     {
@@ -130,13 +141,14 @@ void UserLoop()
             r = SearchMethods.BestFirstSearch(Start, Goal);
             r.Print();
             break;
-        case "6":
-            r = SearchMethods.AStarSearch(Start, Goal);
-            r.Print();
-            break;
         default:
             Console.WriteLine("Goodbye!");
             return;
     }
     UserLoop();
 }
+Location RandomLocation()
+{
+    return myMap[myMap.Keys.ElementAt(Location.RNG.Next(myMap.Count))];
+}
+

@@ -265,6 +265,7 @@ namespace Search_Methods_Homework;
         Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
         return MyRoute;
     }
+   //TODO: Implement A*
     public static Route AStarSearch(Location start, Location goal)
     {
         return new Route();

@@ -9,7 +9,7 @@ namespace Search_Methods_Homework
     public class Location
 
     {
-        static Random RNG = new Random();
+       public  static Random RNG = new Random();
          public Location(string name, float xcord, float ycord) 
         {
             Name = name;
