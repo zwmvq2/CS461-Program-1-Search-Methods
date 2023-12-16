@@ -1,12 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Search_Methods_Homework;
 using System.IO;
-Console.WriteLine("Hello, World!");
 
 Dictionary<string,Location> myMap = new Dictionary<string,Location>();
 LoadLocationsData();
-PrintAdjacencies();
-
+Console.WriteLine("Enter starting location ");
+Location Start = myMap[Console.ReadLine()];
+Console.WriteLine("Enter goal locatoin");
+Location Goal = myMap[Console.ReadLine()];
+Route r = SearchMethods.UndirectedSearch(Start,Goal);
+r.Print();
 void LoadLocationsData()
 {
     //Reads through coordinates csv to populate myMap
@@ -60,3 +63,4 @@ void PrintAdjacencies()
         Console.WriteLine("*************************************************************************************");
     }
 }
+

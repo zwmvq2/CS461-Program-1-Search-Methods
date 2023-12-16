@@ -9,6 +9,7 @@ namespace Search_Methods_Homework
     public class Location
 
     {
+        static Random RNG = new Random();
          public Location(string name, float xcord, float ycord) 
         {
             Name = name;
@@ -30,6 +31,11 @@ namespace Search_Methods_Homework
                 return;
             }
             Adjacencies.Add( neighbor );
+        }
+
+        public Location RandomNeighbor()
+        {
+            return Adjacencies[RNG.Next(Adjacencies.Count)];
         }
     }
 }
