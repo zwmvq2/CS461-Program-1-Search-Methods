@@ -178,7 +178,7 @@ namespace Search_Methods_Homework;
         Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
         return MyRoute;
     }
-    public static Route IDDFSSearch(Location start, Location goal, float TimeLimit = 10000000)
+    public static Route IDDFSSearch(Location start, Location goal, float TimeLimit = 1000000)
     {
         Stopwatch timer = new Stopwatch();
         timer.Start();
@@ -200,9 +200,70 @@ namespace Search_Methods_Homework;
     }
 
 
-    public static Route BestFirstSearch(Location start, Location goal)
+    public static Route BestFirstSearch(Location start, Location goal, float TimeLimit = 1000000)
     {
-        return new Route();
+        Stopwatch timer = new Stopwatch();
+        timer.Start();
+        int NodesSearched = 0;
+        Route MyRoute = new Route();
+        Location CurrentLocation = start;
+        start.MyParent = null;
+        PriorityQueue<Location,float> Open = new PriorityQueue<Location,float>();
+        List<Location> Closed = new List<Location>();
+        while (MyRoute.GoalFound == null)
+        {
+            if (timer.ElapsedTicks > TimeLimit)
+            {
+                MyRoute.GoalFound = false;
+                Console.WriteLine("Algorithim force stopped due to reaching time limit");
+            }
+            if (CurrentLocation == goal)
+            {
+                MyRoute.GoalFound = true;
+            }
+            else
+            {
+                NodesSearched++;
+                foreach (Location edge in CurrentLocation.getAdjacencies())
+                {
+                    if (!Closed.Contains(edge))
+                    {
+                        Open.Enqueue(edge,Heuristic(edge,goal,CurrentLocation));
+                        edge.MyParent = CurrentLocation;
+                    }
+                }
+                RemoveDuplicatesInPriorityQueue(ref Open);
+                Closed.Add(CurrentLocation);
+                if (Open.Count < 1)
+                {
+                    MyRoute.GoalFound = false;
+                }
+                else
+                {
+                    CurrentLocation = Open.Dequeue();
+                }
+            }
+        }
+
+        //Trace from goal node to construct path
+        bool RootFound = false;
+        while (!RootFound)
+        {
+            MyRoute.Path.Insert(0, CurrentLocation);
+            if (CurrentLocation.MyParent == null)
+            {
+                RootFound = true;
+            }
+            else
+            {
+                CurrentLocation = CurrentLocation.MyParent;
+            }
+        }
+
+        timer.Stop();
+        Console.WriteLine("Execution Time: " + timer.ElapsedTicks.ToString() + " ticks ");
+        Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
+        return MyRoute;
     }
     public static Route AStarSearch(Location start, Location goal)
     {
@@ -266,11 +327,32 @@ namespace Search_Methods_Homework;
         return MyRoute;
     }
 
-   private static int Heuristic (Location canidate, ,Location goal)
+   private static float Heuristic (Location canidate,Location goal, Location current)
     {
-        float distance = MathF.Sqrt(MathF.Pow(goal.getCoordinates().Item1 - canidate.getCoordinates().Item1, 2)
-                + MathF.Pow(goal.getCoordinates().Item2 - canidate.getCoordinates().Item2, 2));
-        return (int) distance
+        return Location.Distance(canidate, goal) + (0.70f * Location.Distance(current, canidate));
     }
-
+    
+    //Helper function for best first search. It's tragic that PriorityQueue does not have a Contains method :(
+    private static void RemoveDuplicatesInPriorityQueue(ref PriorityQueue<Location,float> q)
+    {
+        //These 2 lists must be exactly alligned.
+        //When an element is added to one list, the matching element should be added to the other list
+        List<Location> Locations = new List<Location>();
+        List<float> Priorities = new List<float>();
+        while(q.Count > 0)
+        {
+            Location next;
+            float priority;
+            q.TryDequeue(out next, out priority);
+            if(!Locations.Contains(next))
+            {
+                Locations.Add(next);
+                Priorities.Add(priority);
+            }
+        }
+        for (int i =0; i< Locations.Count;i++)
+        {
+            q.Enqueue(Locations[i], Priorities[i]);
+        }
+    }
 }

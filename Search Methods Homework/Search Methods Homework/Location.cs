@@ -54,5 +54,11 @@ namespace Search_Methods_Homework
                 return MyParent.getDepth() + 1;
             }
         }
+
+        public static float Distance(Location loc1, Location loc2)
+        {
+          return   MathF.Sqrt(MathF.Pow(loc1.getCoordinates().Item1 - loc2.getCoordinates().Item1, 2)
+                            + MathF.Pow(loc1.getCoordinates().Item2 - loc2.getCoordinates().Item2, 2));
+        }
     }
 }
