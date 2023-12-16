@@ -42,5 +42,17 @@ namespace Search_Methods_Homework
         //Used for   breadth first search to construct route used
         //Idea from https://stackoverflow.com/questions/8922060/how-to-trace-the-path-in-a-breadth-first-search
         public Location? MyParent;
+        
+        public int getDepth()
+        {
+            if(MyParent == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return MyParent.getDepth() + 1;
+            }
+        }
     }
 }

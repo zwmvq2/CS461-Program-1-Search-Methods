@@ -180,8 +180,23 @@ namespace Search_Methods_Homework;
     }
     public static Route IDDFSSearch(Location start, Location goal, float TimeLimit = 10000000)
     {
-       
-       
+        Stopwatch timer = new Stopwatch();
+        timer.Start();
+        int NodesSearched = 0;
+        Route MyRoute = new Route();
+        for (int MaxDepth = 0; timer.ElapsedTicks < TimeLimit; MaxDepth++)
+        {
+            MyRoute = DepthFirstButForIDDFS(start, goal, ref  NodesSearched, MaxDepth);
+            if(MyRoute.GoalFound == true)
+            {
+               break;
+            }
+        }
+        timer.Stop();
+        Console.WriteLine("Execution Time: " + timer.ElapsedTicks.ToString() + " ticks ");
+        Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
+        return MyRoute;
+
     }
 
 
@@ -199,9 +214,9 @@ namespace Search_Methods_Homework;
         Route MyRoute = new Route();
         Location CurrentLocation = start;
         start.MyParent = null;
+
         Stack<Location> Open = new Stack<Location>();
         List<Location> Closed = new List<Location>();
-        int Depth = 0;
         while (MyRoute.GoalFound == null)
         {
             if (CurrentLocation == goal)
@@ -211,7 +226,7 @@ namespace Search_Methods_Homework;
             else
             {
                 NodesSearched++;
-                if (Depth < DepthLimit)
+                if (CurrentLocation.getDepth() < DepthLimit)
                 {
                     foreach (Location edge in CurrentLocation.getAdjacencies())
                     {
@@ -249,6 +264,13 @@ namespace Search_Methods_Homework;
             }
         }
         return MyRoute;
+    }
+
+   private static int Heuristic (Location canidate, ,Location goal)
+    {
+        float distance = MathF.Sqrt(MathF.Pow(goal.getCoordinates().Item1 - canidate.getCoordinates().Item1, 2)
+                + MathF.Pow(goal.getCoordinates().Item2 - canidate.getCoordinates().Item2, 2));
+        return (int) distance
     }
 
 }
