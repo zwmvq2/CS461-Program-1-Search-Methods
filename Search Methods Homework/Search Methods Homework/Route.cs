@@ -8,12 +8,16 @@ namespace Search_Methods_Homework
 {
     public class Route
     {
-        public bool GoalFound = false;
+        public bool? GoalFound = null;
         public List<Location> Path = new List<Location>();
 
         public void Print()
         {
-            if (!GoalFound)
+            if(GoalFound == null)
+            {
+                Console.WriteLine("This message should never appear, goal found is still null");
+            }
+            else if (GoalFound == false)
             {
                 Console.WriteLine(" Route not found :(");
             }

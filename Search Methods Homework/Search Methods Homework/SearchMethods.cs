@@ -16,7 +16,7 @@ namespace Search_Methods_Homework;
  static class SearchMethods
 {
     
-   public  static Route UndirectedSearch(Location start, Location goal)
+   public  static Route UndirectedSearch(Location start, Location goal, float TimeLimit = 1000000 )
     {
         Stopwatch timer = new Stopwatch();
         timer.Start();
@@ -24,8 +24,13 @@ namespace Search_Methods_Homework;
         Route MyRoute = new Route();
         Location CurrentLocation = start;
         MyRoute.Path.Add(start);
-        while(MyRoute.GoalFound == false)
+        while(MyRoute.GoalFound == null)
         {
+            if(timer.ElapsedTicks > TimeLimit)
+            {
+                MyRoute.GoalFound = false;
+                Console.WriteLine("Algorithim force stopped due to reaching time limit");
+            }
             if(CurrentLocation == goal)
             {
                 MyRoute.GoalFound = true;
@@ -45,36 +50,133 @@ namespace Search_Methods_Homework;
         return MyRoute;
     }
 
-    //TO BE IMPLEMENTED
-   public static Route  BreadthFirstSearch(Location start,Location goal)
+   public static Route  BreadthFirstSearch(Location start,Location goal, float TimeLimit = 1000000)
     {
         Stopwatch timer = new Stopwatch();
         timer.Start();
         int NodesSearched = 0;
         Route MyRoute = new Route();
         Location CurrentLocation = start;
-        MyRoute.Path.Add(start);
-        while (MyRoute.GoalFound == false)
+        start.MyParent = null;
+        Queue<Location> Open = new Queue<Location>();
+        List<Location> Closed = new List<Location>();
+        while (MyRoute.GoalFound == null)
         {
+            if (timer.ElapsedTicks > TimeLimit)
+            {
+                MyRoute.GoalFound = false;
+                Console.WriteLine("Algorithim force stopped due to reaching time limit");
+            }
             if (CurrentLocation == goal)
             {
                 MyRoute.GoalFound = true;
             }
             else
             {
-                
+                NodesSearched++;
+                foreach(Location edge in CurrentLocation.getAdjacencies())
+                {
+                    if(!Open.Contains(edge) && !Closed.Contains(edge))
+                    {
+                        Open.Enqueue(edge);
+                        edge.MyParent = CurrentLocation;
+                    }
+                }
+                Closed.Add(CurrentLocation);
+                if (Open.Count < 1)
+                {
+                    MyRoute.GoalFound = false;
+                }
+                else
+                {
+                    CurrentLocation = Open.Dequeue();
+                }
             }
         }
 
+        //Trace from goal node to construct path
+        bool RootFound = false;
+        while (!RootFound)
+        {
+            MyRoute.Path.Insert(0, CurrentLocation);
+            if (CurrentLocation.MyParent == null)
+            {
+                RootFound = true;
+            }
+            else
+            {
+                CurrentLocation = CurrentLocation.MyParent;
+            }
+        }
 
         timer.Stop();
         Console.WriteLine("Execution Time: " + timer.ElapsedTicks.ToString() + " ticks ");
         Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
         return MyRoute;
     }
-    public static Route DepthFirstSearch(Location start, Location goal)
+    public static Route DepthFirstSearch(Location start, Location goal, float TimeLimit = 1000000)
     {
-        return new Route();
+        Stopwatch timer = new Stopwatch();
+        timer.Start();
+        int NodesSearched = 0;
+        Route MyRoute = new Route();
+        Location CurrentLocation = start;
+        start.MyParent = null;
+        Stack<Location> Open = new Stack<Location>();
+        List<Location> Closed = new List<Location>();
+        while (MyRoute.GoalFound == null)
+        {
+            if (timer.ElapsedTicks > TimeLimit)
+            {
+                MyRoute.GoalFound = false;
+                Console.WriteLine("Algorithim force stopped due to reaching time limit");
+            }
+            if (CurrentLocation == goal)
+            {
+                MyRoute.GoalFound = true;
+            }
+            else
+            {
+                NodesSearched++;
+                foreach (Location edge in CurrentLocation.getAdjacencies())
+                {
+                    if (!Open.Contains(edge) && !Closed.Contains(edge))
+                    {
+                        Open.Push(edge);
+                        edge.MyParent = CurrentLocation;
+                    }
+                }
+                Closed.Add(CurrentLocation);
+                if (Open.Count < 1)
+                {
+                    MyRoute.GoalFound = false;
+                }
+                else
+                {
+                    CurrentLocation = Open.Pop();
+                }
+            }
+        }
+
+        //Trace from goal node to construct path
+        bool RootFound = false;
+        while (!RootFound)
+        {
+            MyRoute.Path.Insert(0, CurrentLocation);
+            if (CurrentLocation.MyParent == null)
+            {
+                RootFound = true;
+            }
+            else
+            {
+                CurrentLocation = CurrentLocation.MyParent;
+            }
+        }
+
+        timer.Stop();
+        Console.WriteLine("Execution Time: " + timer.ElapsedTicks.ToString() + " ticks ");
+        Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
+        return MyRoute;
     }
     public static Route IDDFSSearch(Location start, Location goal)
     {
@@ -88,4 +190,6 @@ namespace Search_Methods_Homework;
     {
         return new Route();
     }
+
+   
 }

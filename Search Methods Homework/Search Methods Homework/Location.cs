@@ -15,6 +15,7 @@ namespace Search_Methods_Homework
             Name = name;
             Coordinates = new Tuple<float,float>(xcord, ycord);
             Adjacencies = new List<Location>();
+
         }
         private string Name;
         public string getName() { return Name; }
@@ -37,5 +38,9 @@ namespace Search_Methods_Homework
         {
             return Adjacencies[RNG.Next(Adjacencies.Count)];
         }
+
+        //Used for   breadth first search to construct route used
+        //Idea from https://stackoverflow.com/questions/8922060/how-to-trace-the-path-in-a-breadth-first-search
+        public Location? MyParent;
     }
 }
