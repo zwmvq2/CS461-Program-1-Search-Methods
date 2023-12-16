@@ -4,12 +4,8 @@ using System.IO;
 
 Dictionary<string,Location> myMap = new Dictionary<string,Location>();
 LoadLocationsData();
-Console.WriteLine("Enter starting location ");
-Location Start = myMap[Console.ReadLine()];
-Console.WriteLine("Enter goal locatoin");
-Location Goal = myMap[Console.ReadLine()];
-Route r = SearchMethods.UndirectedSearch(Start,Goal);
-r.Print();
+UserLoop();
+
 void LoadLocationsData()
 {
     //Reads through coordinates csv to populate myMap
@@ -64,3 +60,83 @@ void PrintAdjacencies()
     }
 }
 
+void UserLoop()
+{
+    Console.WriteLine();
+    bool validStart = false;
+  
+    string input;
+    Location Start = new Location("placeholder", 0, 0);
+    Location Goal = new Location("placeholder", 0, 0);
+    while (!validStart)
+    {
+        Console.WriteLine("Enter starting location ");
+        input = Console.ReadLine();
+        if (myMap.ContainsKey(input))
+        {
+            Start= myMap[input];
+            validStart = true;
+        }
+        else
+        {
+            Console.WriteLine("Location Invalid");
+        }
+    }
+    bool validGoal = false;
+    while (!validGoal)
+    {
+        Console.WriteLine("Enter goal location ");
+        input = Console.ReadLine();
+        if (myMap.ContainsKey(input))
+        {
+            Goal = myMap[input];
+            validGoal = true;
+        }
+        else
+        {
+            Console.WriteLine("Location Invalid");
+        }
+    }
+
+    Route r;
+    Console.WriteLine("Select search Algorithim");
+    Console.WriteLine("1) Undirected");
+    Console.WriteLine("2) Breadth-First Search");
+    Console.WriteLine("3) Depth-First Search");
+    Console.WriteLine("4) ID-DFS Search");
+    Console.WriteLine("5) Best-first Search");
+    Console.WriteLine("6) A* Search");
+    Console.WriteLine("Enter anything aside from 1,2,3,4,5 or 6 to exit the program");
+    input = Console.ReadLine();
+    switch(input)
+    {
+        case "1":
+            r = SearchMethods.UndirectedSearch(Start, Goal);
+            r.Print();
+            break;
+        case "2":
+            r = SearchMethods.BreadthFirstSearch(Start, Goal);
+            r.Print();
+            break;
+        case "3":
+            r = SearchMethods.DepthFirstSearch(Start, Goal);
+            r.Print();
+            break;
+        case "4":
+            r = SearchMethods.IDDFSSearch(Start, Goal);
+            r.Print();
+            break;
+        case "5":
+            r = SearchMethods.BestFirstSearch(Start, Goal);
+            r.Print();
+            break;
+        case "6":
+            r = SearchMethods.AStarSearch(Start, Goal);
+            r.Print();
+            break;
+        default:
+            Console.WriteLine("Goodbye!");
+            return;
+    }
+    UserLoop();
+}

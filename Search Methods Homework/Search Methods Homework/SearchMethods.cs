@@ -44,4 +44,48 @@ namespace Search_Methods_Homework;
         Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
         return MyRoute;
     }
+
+    //TO BE IMPLEMENTED
+   public static Route  BreadthFirstSearch(Location start,Location goal)
+    {
+        Stopwatch timer = new Stopwatch();
+        timer.Start();
+        int NodesSearched = 0;
+        Route MyRoute = new Route();
+        Location CurrentLocation = start;
+        MyRoute.Path.Add(start);
+        while (MyRoute.GoalFound == false)
+        {
+            if (CurrentLocation == goal)
+            {
+                MyRoute.GoalFound = true;
+            }
+            else
+            {
+                
+            }
+        }
+
+
+        timer.Stop();
+        Console.WriteLine("Execution Time: " + timer.ElapsedTicks.ToString() + " ticks ");
+        Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
+        return MyRoute;
+    }
+    public static Route DepthFirstSearch(Location start, Location goal)
+    {
+        return new Route();
+    }
+    public static Route IDDFSSearch(Location start, Location goal)
+    {
+        return new Route();
+    }
+    public static Route BestFirstSearch(Location start, Location goal)
+    {
+        return new Route();
+    }
+    public static Route AStarSearch(Location start, Location goal)
+    {
+        return new Route();
+    }
 }
