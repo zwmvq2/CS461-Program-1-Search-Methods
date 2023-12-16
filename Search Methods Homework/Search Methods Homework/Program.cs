@@ -103,7 +103,7 @@ void UserLoop()
     Console.WriteLine("1) Undirected");
     Console.WriteLine("2) Breadth-First Search");
     Console.WriteLine("3) Depth-First Search");
-    Console.WriteLine("4) ID-DFS Search");
+    Console.WriteLine("4) ID-DFS Search  [TODO FIX THIS ALGORITHIM, currently has an infinite loop");
     Console.WriteLine("5) Best-first Search");
     Console.WriteLine("6) A* Search");
     Console.WriteLine("Enter anything aside from 1,2,3,4,5 or 6 to exit the program");

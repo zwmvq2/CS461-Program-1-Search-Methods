@@ -178,10 +178,13 @@ namespace Search_Methods_Homework;
         Console.WriteLine("Nodes Searched: " + NodesSearched.ToString());
         return MyRoute;
     }
-    public static Route IDDFSSearch(Location start, Location goal)
+    public static Route IDDFSSearch(Location start, Location goal, float TimeLimit = 10000000)
     {
-        return new Route();
+       
+       
     }
+
+
     public static Route BestFirstSearch(Location start, Location goal)
     {
         return new Route();
@@ -191,5 +194,61 @@ namespace Search_Methods_Homework;
         return new Route();
     }
 
-   
+   private static Route DepthFirstButForIDDFS(Location start, Location goal, ref int NodesSearched,int DepthLimit)
+    {
+        Route MyRoute = new Route();
+        Location CurrentLocation = start;
+        start.MyParent = null;
+        Stack<Location> Open = new Stack<Location>();
+        List<Location> Closed = new List<Location>();
+        int Depth = 0;
+        while (MyRoute.GoalFound == null)
+        {
+            if (CurrentLocation == goal)
+            {
+                MyRoute.GoalFound = true;
+            }
+            else
+            {
+                NodesSearched++;
+                if (Depth < DepthLimit)
+                {
+                    foreach (Location edge in CurrentLocation.getAdjacencies())
+                    {
+                        if (!Open.Contains(edge) && !Closed.Contains(edge))
+                        {
+                            Open.Push(edge);
+                            edge.MyParent = CurrentLocation;
+                        }
+                    }
+                }
+                Closed.Add(CurrentLocation);
+                if (Open.Count < 1)
+                {
+                    MyRoute.GoalFound = false;
+                }
+                else
+                {
+                    CurrentLocation = Open.Pop();
+                }
+            }
+        }
+
+        //Trace from goal node to construct path
+        bool RootFound = false;
+        while (!RootFound)
+        {
+            MyRoute.Path.Insert(0, CurrentLocation);
+            if (CurrentLocation.MyParent == null)
+            {
+                RootFound = true;
+            }
+            else
+            {
+                CurrentLocation = CurrentLocation.MyParent;
+            }
+        }
+        return MyRoute;
+    }
+
 }
